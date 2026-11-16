@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Contact us</title>
+<style>
+:root{--bg:#f6f7f9;--surface:#ffffff;--text:#1b2330;--muted:#5d6877;--line:#d5dae1;--accent:#1f5eff;--accent-text:#ffffff;--err:#c0262d;--ok:#1a7f4b;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12151b;--surface:#1b2029;--text:#e8ebf0;--muted:#98a2b1;--line:#333b48;--accent:#6b97ff;--accent-text:#0d1220;--err:#ff7b80;--ok:#5fd596;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#12151b;--surface:#1b2029;--text:#e8ebf0;--muted:#98a2b1;--line:#333b48;--accent:#6b97ff;--accent-text:#0d1220;--err:#ff7b80;--ok:#5fd596;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.5}
+main{max-width:30rem;margin:0 auto;padding:2rem 1.25rem 3rem}
+h1{font-size:1.75rem;margin:0 0 .25rem;letter-spacing:-.01em}
+p.lead{margin:0 0 1.5rem;color:var(--muted)}
+form{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:1.25rem}
+label{display:block;font-weight:600;font-size:.9rem;margin:0 0 .35rem}
+.field{margin-bottom:1rem}
+input,select,textarea{width:100%;font:inherit;color:var(--text);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:.7rem .8rem}
+textarea{min-height:8rem;resize:vertical}
+input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible{outline:3px solid var(--accent);outline-offset:1px}
+.error{color:var(--err);font-size:.85rem;margin:.3rem 0 0;min-height:0}
+button{width:100%;font:inherit;font-weight:600;background:var(--accent);color:var(--accent-text);border:0;border-radius:8px;padding:.85rem;cursor:pointer}
+.done{display:none;text-align:center;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:2rem 1.25rem}
+.done h2{margin:0 0 .4rem;color:var(--ok)}
+.done p{margin:0 0 1rem;color:var(--muted)}
+.done button{width:auto;padding:.7rem 1.2rem}
+</style>
+</head>
+<body>
+<main>
+  <h1>Contact us</h1>
+  <p class="lead">Send a message and we’ll reply within two business days.</p>
+
+  <form id="f" novalidate>
+    <div class="field">
+      <label for="name">Name</label>
+      <input id="name" name="name" autocomplete="name" required>
+      <p class="error" id="e-name" role="alert"></p>
+    </div>
+    <div class="field">
+      <label for="email">Email</label>
+      <input id="email" name="email" type="email" autocomplete="email" required>
+      <p class="error" id="e-email" role="alert"></p>
+    </div>
+    <div class="field">
+      <label for="topic">Topic</label>
+      <select id="topic" name="topic">
+        <option>General question</option>
+        <option>Support</option>
+        <option>Feedback</option>
+        <option>Something else</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="msg">Message</label>
+      <textarea id="msg" name="msg" required></textarea>
+      <p class="error" id="e-msg" role="alert"></p>
+    </div>
+    <button type="submit">Send message</button>
+  </form>
+
+  <div class="done" id="done" role="status">
+    <h2>Message sent</h2>
+    <p>Thanks, <span id="who"></span>. We’ll reply to <span id="to"></span>.</p>
+    <button type="button" id="again">Send another message</button>
+  </div>
+</main>
+<script>
+const f=document.getElementById('f'),done=document.getElementById('done');
+const $=id=>document.getElementById(id);
+function check(){
+  let ok=true;
+  const name=$('name').value.trim(),email=$('email').value.trim(),msg=$('msg').value.trim();
+  $('e-name').textContent=name?'':'Enter your name.';
+  $('e-email').textContent=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)?'':'Enter a valid email address.';
+  $('e-msg').textContent=msg?'':'Write a message.';
+  return !($('e-name').textContent||$('e-email').textContent||$('e-msg').textContent);
+}
+f.addEventListener('submit',e=>{
+  e.preventDefault();
+  if(!check())return;
+  $('who').textContent=$('name').value.trim();
+  $('to').textContent=$('email').value.trim();
+  f.style.display='none';done.style.display='block';
+});
+$('again').addEventListener('click',()=>{f.reset();done.style.display='none';f.style.display='block';});
+</script>
+</body>
+</html>
